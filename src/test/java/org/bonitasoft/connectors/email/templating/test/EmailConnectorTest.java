@@ -348,6 +348,31 @@ public class EmailConnectorTest {
     }
 
     @Test
+    public void sendEmailWithEmptyReplacements() throws Exception {
+        //given
+        final Map<String, Object> parameters = getBasicSettings();
+        final List<List<Object>> replacements = Collections.singletonList(Arrays.asList("customer", (Object) null));
+        parameters.put("html", false);
+        parameters.put("messageTemplate", "Dear ${customer}");
+        parameters.put("replacements", replacements);
+        parameters.put("from", ADDRESSMARK);
+
+        //when
+        executeConnector(parameters);
+
+        //then
+        final List<WiserMessage> messages = server.getMessages();
+        assertEquals(1, messages.size());
+        final WiserMessage message = messages.get(0);
+        assertEquals(ADDRESSMARK, message.getEnvelopeSender());
+        assertEquals(ADDRESSJOHN, message.getEnvelopeReceiver());
+        final MimeMessage mime = message.getMimeMessage();
+        assertEquals(SUBJECT, mime.getSubject());
+        assertTrue(mime.getContentType().contains(TEXT_PLAIN));
+        assertEquals("Dear ", mime.getContent());
+    }
+
+    @Test
     public void sendHtmlEmailWithReplacements() throws Exception {
         //given
         final Map<String, Object> parameters = getBasicSettings();

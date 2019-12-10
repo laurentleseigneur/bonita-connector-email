@@ -216,7 +216,7 @@ public class EmailConnector extends AbstractConnector {
 		}
 		logInputParameter(CHARSET);
 		logInputParameter(MESSAGE_TEMPLATE);
-		logInputParameter(REPLACEMENTS);
+		logInputReplacementParameter(REPLACEMENTS);
 		logInputParameter(HTML);
 		logInputParameter(SUBJECT);
 		logInputParameter(BCC);
@@ -251,6 +251,22 @@ public class EmailConnector extends AbstractConnector {
 			}
 		}
 		logInputParameter(HEADERS);
+	}
+
+	private void logInputReplacementParameter(String replacement) {
+		List<List<Object>> replacements = (List<List<Object>>) getInputParameter(replacement);
+		if (replacements!=null) {
+			for (List<Object> objects : replacements) {
+				if (objects != null && objects.size() > 1) {
+					String value = "";
+					if (objects.get(1) != null) {
+						value = String.valueOf(objects.get(1));
+					}
+					String key = String.valueOf(objects.get(0));
+					LOGGER.info("replacement value: " + key + "=[" + value + "]");
+				}
+			}
+		}
 	}
 
 	private void logInputParameter(String parameterName) {
@@ -411,7 +427,7 @@ public class EmailConnector extends AbstractConnector {
 
 	private String applyReplacements(String messageTemplate, List<List<Object>> replacements) throws ParseException {
 		if (replacements == null) {
-		    // templating not used
+			// templating not used
 			return messageTemplate;
 		} else {
 
@@ -422,7 +438,12 @@ public class EmailConnector extends AbstractConnector {
 
 			for (List<Object> objects : replacements) {
 				if (objects != null && objects.size() > 1) {
-					context.put(String.valueOf(objects.get(0)), objects.get(1));
+					Object value = objects.get(1);
+					if (value == null) {
+						value = "";
+					}
+					String key = String.valueOf(objects.get(0));
+					context.put(key, value);
 				}
 			}
 
@@ -430,7 +451,7 @@ public class EmailConnector extends AbstractConnector {
 			Template template = new Template();
 			template.setRuntimeServices(runtimeServices);
 			StringReader stringReader = new StringReader(messageTemplate);
-			SimpleNode simpleNode = runtimeServices.parse(stringReader,"mail templating");
+			SimpleNode simpleNode = runtimeServices.parse(stringReader, "mail templating");
 			template.setData(simpleNode);
 			template.initDocument();
 
