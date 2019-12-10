@@ -1,6 +1,6 @@
 timestamps {
     ansiColor('xterm') {
-        node {
+        node ('bcd-794') {
             stage('Checkout') {
                 checkout scm
             }
