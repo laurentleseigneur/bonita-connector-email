@@ -11,7 +11,7 @@
     <version>1.0.1-SNAPSHOT</version>
 
     <properties>
-        <bonita.engine.version>7.9.4</bonita.engine.version>
+        <bonita.engine.version>7.10.1</bonita.engine.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
