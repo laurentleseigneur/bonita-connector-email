@@ -6,7 +6,7 @@ timestamps {
             }
             stage('Build') {
                 try {
-                    sh "./mvnw -B clean verify -Djvm=${env.JAVA_HOME_11}/bin/java"
+                    sh "./mvnw -B clean verify "
                     archiveArtifacts 'target/bonita-connector-email-*.zip'
                 } finally {
                     junit allowEmptyResults: true, testResults: '**/target/*-reports/*.xml'
