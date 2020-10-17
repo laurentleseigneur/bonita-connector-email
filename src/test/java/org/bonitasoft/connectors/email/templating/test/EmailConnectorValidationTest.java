@@ -23,10 +23,6 @@ import org.bonitasoft.engine.connector.ConnectorValidationException;
 import org.bonitasoft.engine.exception.BonitaException;
 import org.junit.Test;
 
-/**
- * @author Baptiste Mesta
- * @author Matthieu Chaffotte
- */
 public class EmailConnectorValidationTest {
 
     private static final String SMTP_HOST = "localhost";
